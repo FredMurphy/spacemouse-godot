@@ -390,6 +390,7 @@ func _on_menu_id(id: int) -> void:
 
 func _update_debug_label(state: Dictionary, cam: Camera3D, t: Vector3, r: Vector3) -> void:
 	var btns: PackedInt32Array = state.get("buttons", PackedInt32Array())
+	var battery_percent := state.get("battery_percent", 0)
 	var report_id := state.get("report_id", -1)
 	var seen := state.get("seen_reports", {})
 	var usage_page := state.get("usage_page", 0)
@@ -405,6 +406,6 @@ func _update_debug_label(state: Dictionary, cam: Camera3D, t: Vector3, r: Vector
 	var cam_path := cam.get_path() if cam else ""
 	var cam_pos := cam.global_position if cam else Vector3.ZERO
 	var thread_alive := state.get("thread_alive", false)
-	_debug_label.text = "SpaceMouse\nRaw T: %s\nRaw R: %s\nVel T: %s\nVel R: %s\nButtons: %s\nCamera: %s @ %s\nUsage page: 0x%X\nUsage: 0x%X\nPath: %s\nConnected: %s\nThread alive: %s\nLoop count: %s\nLast tick ms: %s\nLast read: %s (errors: %s, reads: %s)\nLast error: %s\nLast report id: %s\nSeen ids: %s\nLast report: %s" % [
-		t, r, _vel_t, _vel_r, btns, cam_path, cam_pos, usage_page, usage, path, connected, thread_alive, loop_count, last_tick_ms, last_read, error_count, read_count, last_err, report_id, seen, device.get_last_report_hex()
+	_debug_label.text = "SpaceMouse\nRaw T: %s\nRaw R: %s\nVel T: %s\nVel R: %s\nButtons: %s\nBattery: %s\nCamera: %s @ %s\nUsage page: 0x%X\nUsage: 0x%X\nPath: %s\nConnected: %s\nThread alive: %s\nLoop count: %s\nLast tick ms: %s\nLast read: %s (errors: %s, reads: %s)\nLast error: %s\nLast report id: %s\nSeen ids: %s\nLast report: %s" % [
+		t, r, _vel_t, _vel_r, btns, battery_percent, cam_path, cam_pos, usage_page, usage, path, connected, thread_alive, loop_count, last_tick_ms, last_read, error_count, read_count, last_err, report_id, seen, device.get_last_report_hex()
 	]

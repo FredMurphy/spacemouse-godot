@@ -206,6 +206,8 @@ Dictionary SpaceMouseDevice::get_state() {
 	state["loop_count"] = (int64_t)loop_count;
 	state["last_tick_ms"] = (int64_t)last_tick_ms;
 	state["thread_alive"] = thread_alive.load();
+	state["battery_percent"] = battery_percent;
+
 	Dictionary seen;
 	for (const auto &kv : seen_reports) {
 		seen[String::num_int64(kv.first)] = kv.second;
@@ -342,6 +344,11 @@ void SpaceMouseDevice::handle_report(const uint8_t *p_data, size_t p_size) {
 				handle_buttons(p_data + 1, p_size - 1);
 			}
 			break;
+		case 0x17: // battery percent
+			if (p_size >= 2) {
+				handle_battery(p_data + 1);
+			}
+			break;
 		default:
 			if (raw_logging) {
 				UtilityFunctions::print(String("SpaceMouse: unhandled report id: ") + String::num_int64(report_id, 16));
@@ -388,4 +395,10 @@ void SpaceMouseDevice::handle_buttons(const uint8_t *p_data, size_t p_size) {
 
 	std::lock_guard<std::mutex> lock(state_mutex);
 	buttons = btns;
+}
+
+void SpaceMouseDevice::handle_battery(const uint8_t *p_data) {
+
+	std::lock_guard<std::mutex> lock(state_mutex);
+	battery_percent = *p_data;
 }

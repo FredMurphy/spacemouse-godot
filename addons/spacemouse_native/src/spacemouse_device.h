@@ -45,6 +45,7 @@ private:
 	void handle_translation(const uint8_t *p_data);
 	void handle_rotation(const uint8_t *p_data);
 	void handle_buttons(const uint8_t *p_data, size_t p_size);
+	void handle_battery(const uint8_t *p_data);
 	bool matches_spacemouse(const hid_device_info *p_info) const;
 
 	hid_device *device = nullptr;
@@ -69,6 +70,7 @@ private:
 	Vector3 translation;
 	Vector3 rotation;
 	PackedInt32Array buttons;
+	uint8_t battery_percent = 0;
 	std::vector<uint8_t> last_report;
 	std::unordered_map<uint8_t, int> seen_reports;
 };
